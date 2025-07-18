@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Pattern Profitability Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-line"></i> Pattern Profitability Analyzer</h1>
+            <p>Find winning patterns with statistical edge 📈</p>
+        </header>
+
+        <div class="card input-card">
+            <h2><i class="fas fa-plus-circle"></i> Add New Pattern Data</h2>
+            <div class="input-group">
+                <div class="input-field">
+                    <label for="accuracy"><i class="fas fa-bullseye"></i> Accuracy %</label>
+                    <input type="number" id="accuracy" min="0" max="100" placeholder="70">
+                </div>
+                <div class="input-field">
+                    <label for="result"><i class="fas fa-trophy"></i> Current Result</label>
+                    <select id="result">
+                        <option value="win">✅ Win</option>
+                        <option value="loss">❌ Loss</option>
+                    </select>
+                </div>
+                <div class="input-field">
+                    <label for="lastResult"><i class="fas fa-history"></i> Last Time Result</label>
+                    <select id="lastResult">
+                        <option value="win">✅ Win</option>
+                        <option value="loss">❌ Loss</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addData()">
+                <i class="fas fa-save"></i> Add Data
+            </button>
+        </div>
+
+        <div class="card analysis-card">
+            <h2><i class="fas fa-chart-pie"></i> Pattern Analysis</h2>
+            <button class="btn-analyze" onclick="analyzeData()">
+                <i class="fas fa-calculator"></i> Analyze Patterns
+            </button>
+            <div id="results" class="results-box"></div>
+        </div>
+
+        <div class="card data-card">
+            <h2><i class="fas fa-database"></i> Pattern History</h2>
+            <div class="table-container">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Accuracy</th>
+                            <th>Current</th>
+                            <th>Last Time</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
