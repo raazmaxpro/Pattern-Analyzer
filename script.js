@@ -12,30 +12,20 @@ document.querySelectorAll('button').forEach(btn => {
     });
 });
 
-// Glow effect on analysis
-function analyzeData() {
-    // ... (previous code)
-    document.getElementById('results').innerHTML = resultsHTML;
-    
-    // Add glow effect
-    const resultsBox = document.getElementById('results');
-    resultsBox.style.animation = 'glow 1.5s ease-in-out';
-    setTimeout(() => { resultsBox.style.animation = ''; }, 1500);
-}
-
 function addData() {
     const accuracy = parseInt(document.getElementById('accuracy').value);
     const result = document.getElementById('result').value;
     const lastResult = document.getElementById('lastResult').value;
-    
+    const wldata = document.getElementById('wldata').value;
+
     if (accuracy >= 0 && accuracy <= 100) {
         patternData.push({ 
             accuracy, 
             result, 
-            lastResult 
+            lastResult,
+            wldata
         });
         updateTable();
-        // Clear accuracy field for new entry
         document.getElementById('accuracy').value = '';
     } else {
         alert("Please enter accuracy between 0-100%");
@@ -45,20 +35,23 @@ function addData() {
 function updateTable() {
     const tbody = document.querySelector('#dataTable tbody');
     tbody.innerHTML = '';
-    
+
     patternData.forEach((data, index) => {
         const row = document.createElement('tr');
-        
+
         row.innerHTML = `
             <td>${index + 1}</td>
             <td>${data.accuracy}%</td>
             <td class="${data.result}">${data.result === 'win' ? '✅ Win' : '❌ Loss'}</td>
             <td class="${data.lastResult}">${data.lastResult === 'win' ? '✅ Win' : '❌ Loss'}</td>
+            <td class="${data.wldata}">${data.wldata === 'win' ? '✅ Win' : '❌ Loss'}</td>
         `;
-        
+
         tbody.appendChild(row);
     });
 }
+
+
 
 function analyzeData() {
     if (patternData.length === 0) {
@@ -70,6 +63,35 @@ function analyzeData() {
         return;
     }
 
+    // ✅ Calculate win/loss based on wldata
+    let totalWins = 0;
+    let totalLosses = 0;
+
+    patternData.forEach(data => {
+        if (data.wldata === 'win') totalWins++;
+        else if (data.wldata === 'loss') totalLosses++;
+    });
+
+    const totalTrades = totalWins + totalLosses;
+
+    const winLossHTML = `
+        <h3><i class="fas fa-balance-scale"></i> Win/Loss Stats</h3>
+        <div class="result-item">
+            <div class="result-header">
+                <span class="result-label win">✅ Total Wins</span>
+                <span class="result-value">${totalWins}</span>
+            </div>
+            <div class="result-header">
+                <span class="result-label loss">❌ Total Losses</span>
+                <span class="result-value">${totalLosses}</span>
+            </div>
+            <div class="result-header">
+                <span class="result-label"><i class="fas fa-list-ol"></i> Total Trades</span>
+                <span class="result-value">${totalTrades}</span>
+            </div>
+        </div>
+    `;
+
     // Accuracy analysis
     const accuracyRanges = [
         { name: "⭐ 80-100%", min: 80, max: 100, wins: 0, total: 0 },
@@ -78,14 +100,12 @@ function analyzeData() {
         { name: "⚠️ Below 60%", min: 0, max: 59, wins: 0, total: 0 }
     ];
 
-    // Last result analysis
     const lastResultAnalysis = [
         { name: "After ✅ Win", value: "win", wins: 0, total: 0 },
         { name: "After ❌ Loss", value: "loss", wins: 0, total: 0 }
     ];
 
     patternData.forEach(data => {
-        // Accuracy analysis
         for (const range of accuracyRanges) {
             if (data.accuracy >= range.min && data.accuracy <= range.max) {
                 range.total++;
@@ -94,7 +114,6 @@ function analyzeData() {
             }
         }
 
-        // Last result analysis
         const lastResult = lastResultAnalysis.find(item => item.value === data.lastResult);
         if (lastResult) {
             lastResult.total++;
@@ -102,7 +121,6 @@ function analyzeData() {
         }
     });
 
-    // Generate results HTML
     let resultsHTML = `
         <h3><i class="fas fa-chart-bar"></i> Accuracy Analysis</h3>
         ${accuracyRanges.map(range => {
@@ -139,5 +157,13 @@ function analyzeData() {
         }).join('')}
     `;
 
+    // Combine win/loss section at top
+    resultsHTML = winLossHTML + resultsHTML;
+
     document.getElementById('results').innerHTML = resultsHTML;
+
+    // Glow animation
+    const resultsBox = document.getElementById('results');
+    resultsBox.style.animation = 'glow 1.5s ease-in-out';
+    setTimeout(() => { resultsBox.style.animation = ''; }, 1500);
 }
