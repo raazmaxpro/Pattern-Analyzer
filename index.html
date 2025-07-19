@@ -36,6 +36,14 @@
                         <option value="loss">❌ Loss</option>
                     </select>
                 </div>
+                <div class="input-field">
+    <label for="wldata"><i class="fas fa-history"></i> Win & Loss</label>
+    <select id="wldata">
+        <option value="win">✅ Win</option>
+        <option value="loss">❌ Loss</option>
+    </select>
+</div>
+
             </div>
             <button class="btn-add" onclick="addData()">
                 <i class="fas fa-save"></i> Add Data
@@ -60,6 +68,7 @@
                             <th>Accuracy</th>
                             <th>Current</th>
                             <th>Last Time</th>
+                            <th>W/L</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
